@@ -33,8 +33,11 @@ namespace nifi {
 namespace minifi {
 namespace c2 {
 
+#ifdef WIN32
+#pragma push_macro("GetObject")
+#undef GetObject
+#endif
 const C2Payload RESTProtocol::parseJsonResponse(const C2Payload &payload, const std::vector<char> &response) {
-#ifndef WIN32
   rapidjson::Document root;
 
   try {
@@ -43,6 +46,7 @@ const C2Payload RESTProtocol::parseJsonResponse(const C2Payload &payload, const 
       std::string requested_operation = getOperation(payload);
 
       std::string identifier;
+
       if (root.HasMember("operationid")) {
         identifier = root["operationid"].GetString();
       } else if (root.HasMember("operationId")) {
@@ -50,16 +54,25 @@ const C2Payload RESTProtocol::parseJsonResponse(const C2Payload &payload, const 
       } else if (root.HasMember("identifier")) {
         identifier = root["identifier"].GetString();
       }
-      if (root["requested_operations"].Size() == 0 && root["requestedOperations"].Size() == 0)
+
+      int size = 0;
+      if (root.HasMember("requested_operations")) {
+        size = root["requested_operations"].Size();
+      }
+      if (root.HasMember("requestedOperations")) {
+        size = root["requestedOperations"].Size();
+      }
+
+      // neither must be there. We don't want assign array yet and cause an assertion error
+      if (size == 0)
         return C2Payload(payload.getOperation(), state::UpdateState::READ_COMPLETE, true);
 
       C2Payload new_payload(payload.getOperation(), state::UpdateState::NESTED, true);
-
       if (!identifier.empty())
         new_payload.setIdentifier(identifier);
-      auto array = root["requested_operations"].GetArray();
-      if (root["requested_operations"].Size() == 0)
-        array = root["requestedOperations"].GetArray();
+
+      auto array = root.HasMember("requested_operations") ? root["requested_operations"].GetArray() : root["requestedOperations"].GetArray();
+
       for (const rapidjson::Value& request : array) {
         Operation newOp = stringToOperation(request["operation"].GetString());
         C2Payload nested_payload(newOp, state::UpdateState::READ_COMPLETE, true);
@@ -128,7 +141,6 @@ const C2Payload RESTProtocol::parseJsonResponse(const C2Payload &payload, const 
     }
   } catch (...) {
   }
-#endif
   return C2Payload(payload.getOperation(), state::UpdateState::READ_COMPLETE, true);
 }
 
@@ -387,7 +399,9 @@ Operation RESTProtocol::stringToOperation(const std::string str) {
   }
   return Operation::HEARTBEAT;
 }
-
+#ifdef WIN32
+#pragma pop_macro("GetObject")
+#endif
 } /* namespace c2 */
 } /* namespace minifi */
 } /* namespace nifi */
