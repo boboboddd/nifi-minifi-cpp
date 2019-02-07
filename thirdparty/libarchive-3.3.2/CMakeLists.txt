@@ -178,7 +178,7 @@ ENDIF (MSVC)
 include(CTest)
 
 OPTION(ENABLE_NETTLE "Enable use of Nettle" ON)
-OPTION(ENABLE_OPENSSL "Enable use of OpenSSL" ON)
+OPTION(ENABLE_OPENSSL "Enable use of OpenSSL" OFF)
 OPTION(ENABLE_LZO "Enable the use of the system LZO library if found" OFF)
 OPTION(ENABLE_LZMA "Enable the use of the system LZMA library if found" ON)
 
@@ -189,7 +189,7 @@ OPTION(ENABLE_EXPAT "Enable the use of the system EXPAT library if found" ON)
 OPTION(ENABLE_PCREPOSIX "Enable the use of the system PCREPOSIX library if found" ON)
 OPTION(ENABLE_LibGCC "Enable the use of the system LibGCC library if found" ON)
 # CNG is used for encrypt/decrypt Zip archives on Windows.
-OPTION(ENABLE_CNG "Enable the use of CNG(Crypto Next Generation)" OFF)
+OPTION(ENABLE_CNG "Enable the use of CNG(Crypto Next Generation)" ON)
 
 OPTION(ENABLE_TAR "Enable tar building" FALSE)
 OPTION(ENABLE_TAR_SHARED "Enable dynamic build of tar" FALSE)
