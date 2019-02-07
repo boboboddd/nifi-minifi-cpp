@@ -189,7 +189,7 @@ OPTION(ENABLE_EXPAT "Enable the use of the system EXPAT library if found" ON)
 OPTION(ENABLE_PCREPOSIX "Enable the use of the system PCREPOSIX library if found" ON)
 OPTION(ENABLE_LibGCC "Enable the use of the system LibGCC library if found" ON)
 # CNG is used for encrypt/decrypt Zip archives on Windows.
-OPTION(ENABLE_CNG "Enable the use of CNG(Crypto Next Generation)" ON)
+OPTION(ENABLE_CNG "Enable the use of CNG(Crypto Next Generation)" OFF)
 
 OPTION(ENABLE_TAR "Enable tar building" FALSE)
 OPTION(ENABLE_TAR_SHARED "Enable dynamic build of tar" FALSE)
