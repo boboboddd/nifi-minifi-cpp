@@ -120,9 +120,9 @@ void Properties::loadConfigureFile(const char *fileName) {
     if (fileName[0] != FILE_SEPARATOR) {
       adjustedFilename = adjustedFilename + getHome() + FILE_SEPARATOR + fileName;
     } else {
-		if (adjustedFilename.empty()) {
-			adjustedFilename = getHome();
-		}
+      if (adjustedFilename.empty()) {
+        adjustedFilename = getHome();
+      }
       adjustedFilename += fileName;
     }
   }
