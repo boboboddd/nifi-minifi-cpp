@@ -177,7 +177,9 @@ if (OPENSSL_OFF STREQUAL "OFF")
 		endif()
 	
 		# Include OpenSSL
+		if (NOT OPENSSL_FORCE_SHARED)
 		set(OPENSSL_USE_STATIC_LIBS TRUE)
+		endif()
 		find_package (OpenSSL REQUIRED)
 
 	   
